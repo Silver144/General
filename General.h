@@ -71,6 +71,8 @@ private:
 	QCheckBox *timebox;
 	QCheckBox *autobox;
 
+	void handleLoLK();
+	void handleHSiFS();
 
 	void setupUI();
 
