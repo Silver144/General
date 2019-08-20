@@ -133,7 +133,8 @@ bool th15::isRunning()
 	TID2 = GetWindowThreadProcessId(hCurrentWindow1, &PID2);
 	TID3 = GetWindowThreadProcessId(hCurrentWindow3, &PID3);
 	tmppe.dwSize = sizeof(PROCESSENTRY32);
-	if (!Process32First(tmphSnapshot, &tmppe)) return false;
+	if (!Process32First(tmphSnapshot, &tmppe))
+		return false;
 	do
 	{
 		tmppe.dwSize = sizeof(PROCESSENTRY32);
@@ -142,6 +143,7 @@ bool th15::isRunning()
 		{
 			pe = tmppe;
 			hSnapshot = tmphSnapshot;
+			current_game = "gzz";
 			return true;
 		}
 	} while (1);

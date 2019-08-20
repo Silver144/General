@@ -5,14 +5,13 @@
 #include <QLabel>
 #include <QCheckBox>
 #include <QTimer>
+#include <functional>
 #include <Windows.h>
 #include <psapi.h>
 #include <tlhelp32.h>
 
-class th16
+namespace th16
 {
-
-public:
 	void playerlock();
 	void playerres();
 	void bomblock();
@@ -28,12 +27,10 @@ public:
 	void timelock();
 	void timeres();
 	bool isRunning();
-};
+}
 
-class th15
+namespace th15
 {
-
-public:
 	void playerlock();
 	void playerres();
 	void bomblock();
@@ -59,10 +56,7 @@ class General : public QMainWindow
 public:
 	explicit General(QWidget *parent = Q_NULLPTR);
 
-	th16 tkz;
-	th15 gzz;
 private:
-	QTimer *timer;
 	QCheckBox *playerbox;
 	QCheckBox *bombbox;
 	QCheckBox *invbox;
@@ -70,16 +64,35 @@ private:
 	QCheckBox *powerbox;
 	QCheckBox *timebox;
 	QCheckBox *autobox;
-
-	void handleLoLK();
-	void handleHSiFS();
-
+	std::vector<std::function<bool()>> game_exist;
+	std::map<std::string, std::function<void()>> playerlock;
+	std::map<std::string, std::function<void()>> playerres;
+	std::map<std::string, std::function<void()>> bomblock;
+	std::map<std::string, std::function<void()>> bombres;
+	std::map<std::string, std::function<void()>> timelock;
+	std::map<std::string, std::function<void()>> timeres;
+	std::map<std::string, std::function<void()>> powerlock;
+	std::map<std::string, std::function<void()>> powerres;
+	std::map<std::string, std::function<void()>> autobomb;
+	std::map<std::string, std::function<void()>> noauto;
+	std::map<std::string, std::function<void()>> invincible;
+	std::map<std::string, std::function<void()>> des;
+	std::map<std::string, std::function<void()>> enemysb;
+	std::map<std::string, std::function<void()>> enemyinv;
+	void init();
 	void setupUI();
 
 private slots:
-	void checkBox();
-	
+	void handleplayer(int state);
+	void handlebomb(int state);
+	void handletime(int state);
+	void handleinv(int state);
+	void handleenemy(int state);
+	void handleauto(int state);
+	void handlepower(int state);
 };
 
 extern PROCESSENTRY32 pe;
 extern HANDLE hSnapshot;
+
+inline std::string current_game;

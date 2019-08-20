@@ -2,7 +2,6 @@
 
 void th16::invincible()
 {
-	
 	hSnapshot = OpenProcess(PROCESS_ALL_ACCESS, false, (DWORD)pe.th32ProcessID);
 	unsigned char z = 1;
 	WriteProcessMemory(hSnapshot, (LPVOID)0x00443FE1, &z, 1, NULL);
@@ -144,6 +143,7 @@ bool th16::isRunning()
 		{
 			pe = tmppe;
 			hSnapshot = tmphSnapshot;
+			current_game = "tkz";
 			return true;
 		}
 	} while (1);

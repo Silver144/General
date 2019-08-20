@@ -1,289 +1,145 @@
 #include "General.h"
+#include <QDebug>
 
 PROCESSENTRY32 pe;
 HANDLE hSnapshot;
 
-bool flag[20][10][2];
+#define mf std::make_pair<std::string, std::function<void()>>
+
+// #define MF std::make_pair<std::string, std::function<void()>>
 
 General::General(QWidget *parent)
-	: QMainWindow(parent)
+	: QMainWindow(parent), playerbox(new QCheckBox("锁残机", this)), bombbox(new QCheckBox("锁Bomb", this)), powerbox(new QCheckBox("锁火力", this)),
+	  timebox(new QCheckBox("锁时间", this)), invbox(new QCheckBox("无敌", this)), autobox(new QCheckBox("自动放B", this)), eneinvbox(new QCheckBox("敌人无敌", this))
 {
+	init();
 	setupUI();
-
-	memset(flag, 0, sizeof(flag));
-	timer = new QTimer(this);
-	timer->start(100);
-	connect(timer, SIGNAL(timeout()), this, SLOT(checkBox()));
+	connect(playerbox, SIGNAL(stateChanged(int)), this, SLOT(handleplayer(int)));
 }
 
-void General::handleLoLK()
+void General::handleplayer(int state)
 {
-	this->setWindowTitle("th15");
-	if (invbox->isChecked())
-	{
-		if (!flag[15][0][0])
-		{
-			gzz.invincible();
-			flag[15][0][0] = true;
-			flag[15][0][1] = false;
-		}
-	}
+	for (auto &detect : game_exist)
+		if (detect())
+			break;
+	if (state == Qt::Unchecked)
+		playerres[current_game];
 	else
-	{
-		if (!flag[15][0][1])
-		{
-			gzz.des();
-			flag[15][0][0] = false;
-			flag[15][0][1] = true;
-		}
-	}
-	if (powerbox->isChecked())
-	{
-		if (!flag[15][1][0])
-		{
-			gzz.powerlock();
-			flag[15][1][0] = true;
-			flag[15][1][1] = false;
-		}
-	}
-	else
-	{
-		if (!flag[15][1][1])
-		{
-			gzz.powerres();
-			flag[15][1][0] = false;
-			flag[15][1][1] = true;
-		}
-	}
-	if (bombbox->isChecked())
-	{
-		if (!flag[15][2][0])
-		{
-			gzz.bomblock();
-			flag[15][2][0] = true;
-			flag[15][2][1] = false;
-		}
-	}
-	else
-	{
-		if (!flag[15][2][1])
-		{
-			gzz.bombres();
-			flag[15][2][0] = false;
-			flag[15][2][1] = true;
-		}
-	}
-	if (playerbox->isChecked())
-	{
-		if (!flag[15][3][0])
-		{
-			gzz.playerlock();
-			flag[15][3][0] = true;
-			flag[15][3][1] = false;
-		}
-	}
-	else
-	{
-		if (!flag[15][3][1])
-		{
-			gzz.playerres();
-			flag[15][3][0] = false;
-			flag[15][3][1] = true;
-		}
-	}
-	if (eneinvbox->isChecked())
-	{
-		if (!flag[15][4][0])
-		{
-			gzz.enemyinv();
-			flag[15][4][0] = true;
-			flag[15][4][1] = false;
-		}
-	}
-	else
-	{
-		if (!flag[15][4][1])
-		{
-			gzz.enemysb();
-			flag[15][4][0] = false;
-			flag[15][4][1] = true;
-		}
-	}
-	if (autobox->isChecked())
-	{
-		if (!flag[15][5][0])
-		{
-			gzz.autobomb();
-			flag[15][5][0] = true;
-			flag[15][5][1] = false;
-		}
-	}
-	else
-	{
-		if (!flag[15][5][1])
-		{
-			gzz.noauto();
-			flag[15][5][0] = false;
-			flag[15][5][1] = true;
-		}
-	}
-	if (timebox->isChecked())
-	{
-		if (!flag[15][6][0])
-		{
-			gzz.timelock();
-			flag[15][6][0] = true;
-			flag[15][6][1] = false;
-		}
-	}
-	else
-	{
-		if (!flag[15][6][1])
-		{
-			gzz.timeres();
-			flag[15][6][0] = false;
-			flag[15][6][1] = true;
-		}
-	}
+		playerlock[current_game];
 }
 
-void General::handleHSiFS()
+void General::handlebomb(int state)
 {
-	this->setWindowTitle("th16");
-	if (invbox->isChecked())
-	{
-		if (!flag[16][0][0])
-		{
-			tkz.invincible();
-			flag[16][0][0] = true;
-			flag[16][0][1] = false;
-		}
-	}
+	for (auto &detect : game_exist)
+		if (detect())
+			break;
+	if (state == Qt::Unchecked)
+		bombres[current_game];
 	else
-	{
-		if (!flag[16][0][1])
-		{
-			tkz.des();
-			flag[16][0][0] = false;
-			flag[16][0][1] = true;
-		}
-	}
-	if (powerbox->isChecked())
-	{
-		if (!flag[16][1][0])
-		{
-			tkz.powerlock();
-			flag[16][1][0] = true;
-			flag[16][1][1] = false;
-		}
-	}
-	else
-	{
-		if (!flag[16][1][1])
-		{
-			tkz.powerres();
-			flag[16][1][0] = false;
-			flag[16][1][1] = true;
-		}
-	}
-	if (bombbox->isChecked())
-	{
-		if (!flag[16][2][0])
-		{
-			tkz.bomblock();
-			flag[16][2][0] = true;
-			flag[16][2][1] = false;
-		}
-	}
-	else
-	{
-		if (!flag[16][2][1])
-		{
-			tkz.bombres();
-			flag[16][2][0] = false;
-			flag[16][2][1] = true;
-		}
-	}
-	if (playerbox->isChecked())
-	{
-		if (!flag[16][3][0])
-		{
-			tkz.playerlock();
-			flag[16][3][0] = true;
-			flag[16][3][1] = false;
-		}
-	}
-	else
-	{
-		if (!flag[16][3][1])
-		{
-			tkz.playerres();
-			flag[16][3][0] = false;
-			flag[16][3][1] = true;
-		}
-	}
-	if (eneinvbox->isChecked())
-	{
-		if (!flag[16][4][0])
-		{
-			tkz.enemyinv();
-			flag[16][4][0] = true;
-			flag[16][4][1] = false;
-		}
-	}
-	else
-	{
-		if (!flag[16][4][1])
-		{
-			tkz.enemysb();
-			flag[16][4][0] = false;
-			flag[16][4][1] = true;
-		}
-	}
-	if (autobox->isChecked())
-	{
-		if (!flag[16][5][0])
-		{
-			tkz.autobomb();
-			flag[16][5][0] = true;
-			flag[16][5][1] = false;
-		}
-	}
-	else
-	{
-		if (!flag[16][5][1])
-		{
-			tkz.noauto();
-			flag[16][5][0] = false;
-			flag[16][5][1] = true;
-		}
-	}
-	if (timebox->isChecked())
-	{
-		if (!flag[16][6][0])
-		{
-			tkz.timelock();
-			flag[16][6][0] = true;
-			flag[16][6][1] = false;
-		}
-	}
-	else
-	{
-		if (!flag[16][6][1])
-		{
-			tkz.timeres();
-			flag[16][6][0] = false;
-			flag[16][6][1] = true;
-		}
-	}
+		bomblock[current_game];
 }
 
-void General::checkBox()
+void General::handletime(int state)
 {
-	if (tkz.isRunning())
-		handleHSiFS();
-	else if (gzz.isRunning())
-		handleLoLK();
+	for (auto &detect : game_exist)
+		if (detect())
+			break;
+	if (state == Qt::Unchecked)
+		timeres[current_game];
+	else
+		timelock[current_game];
+}
+
+void General::handlepower(int state)
+{
+	for (auto &detect : game_exist)
+		if (detect())
+			break;
+	if (state == Qt::Unchecked)
+		powerres[current_game];
+	else
+		powerlock[current_game];
+}
+
+void General::handleinv(int state)
+{
+	for (auto &detect : game_exist)
+		if (detect())
+			break;
+	if (state == Qt::Unchecked)
+		des[current_game];
+	else
+		invincible[current_game];
+}
+
+void General::handleauto(int state)
+{
+	for (auto &detect : game_exist)
+		if (detect())
+			break;
+	if (state == Qt::Unchecked)
+		noauto[current_game];
+	else
+		autobomb[current_game];
+}
+
+void General::handleenemy(int state)
+{
+	for (auto &detect : game_exist)
+		if (detect())
+			break;
+	if (state == Qt::Unchecked)
+		enemysb[current_game];
+	else
+		enemyinv[current_game];
+}
+
+void General::init()
+{
+	game_exist.push_back(th15::isRunning);
+	game_exist.push_back(th16::isRunning);
+
+	playerlock.insert(std::move(mf("tkz", th16::playerlock)));
+	playerlock.insert(std::move(mf("gzz", th15::playerlock)));
+
+	playerres.insert(std::move(mf("tkz", th16::playerres)));
+	playerres.insert(std::move(mf("gzz", th15::playerres)));
+
+	bomblock.insert(std::move(mf("tkz", th16::bomblock)));
+	bomblock.insert(std::move(mf("gzz", th15::bomblock)));
+	
+	bombres.insert(std::move(mf("tkz", th16::bombres)));
+	bombres.insert(std::move(mf("gzz", th15::bombres)));
+
+	timelock.insert(std::move(mf("tkz", th16::timelock)));
+	timelock.insert(std::move(mf("gzz", th15::timelock)));
+	
+	timeres.insert(std::move(mf("tkz", th16::timeres)));
+	timeres.insert(std::move(mf("gzz", th15::timeres)));
+
+	powerlock.insert(std::move(mf("tkz", th16::powerlock)));
+	powerlock.insert(std::move(mf("gzz", th15::powerlock)));
+	
+	powerres.insert(std::move(mf("tkz", th16::powerres)));
+	powerres.insert(std::move(mf("gzz", th15::powerres)));
+
+	invincible.insert(std::move(mf("tkz", th16::invincible)));
+	invincible.insert(std::move(mf("gzz", th15::invincible)));
+	
+	des.insert(std::move(mf("tkz", th16::des)));
+	des.insert(std::move(mf("gzz", th15::des)));
+
+	autobomb.insert(std::move(mf("tkz", th16::autobomb)));
+	autobomb.insert(std::move(mf("gzz", th15::autobomb)));
+	
+	noauto.insert(std::move(mf("tkz", th16::noauto)));
+	noauto.insert(std::move(mf("gzz", th15::noauto)));
+
+	enemyinv.insert(std::move(mf("tkz", th16::enemyinv)));
+	enemyinv.insert(std::move(mf("gzz", th15::enemyinv)));
+	
+	enemysb.insert(std::move(mf("tkz", th16::enemysb)));
+	enemysb.insert(std::move(mf("gzz", th15::enemysb)));
 }
 
 void General::setupUI()
@@ -297,24 +153,11 @@ void General::setupUI()
 	this->setFixedSize(200, 240);
 	this->move((width - 205) / 2, (height - 140) / 2);
 
-	playerbox = new QCheckBox("锁残机", this);
 	playerbox->setGeometry(QRect(14, 14, 100, 23));
-	
-	bombbox = new QCheckBox("锁Bomb", this);
 	bombbox->setGeometry(QRect(14, 44, 100, 23));
-	
-	powerbox = new QCheckBox("锁火力", this);
 	powerbox->setGeometry(QRect(14, 74, 100, 23));
-	
-	timebox = new QCheckBox("锁时间", this);
 	timebox->setGeometry(QRect(14, 104, 120, 23));
-	
-	invbox = new QCheckBox("无敌", this);
 	invbox->setGeometry(QRect(14, 134, 100, 23));
-	
-	autobox = new QCheckBox("自动放B", this);
-	autobox->setGeometry(QRect(14, 164, 100, 23));
-	
-	eneinvbox = new QCheckBox("敌人无敌", this);
+	autobox->setGeometry(QRect(14, 164, 100, 23));	
 	eneinvbox->setGeometry(QRect(14, 194, 100, 23));
 }
