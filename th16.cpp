@@ -9,7 +9,6 @@ void th16::invincible()
 
 void th16::des()
 {
-	
 	hSnapshot = OpenProcess(PROCESS_ALL_ACCESS, false, (DWORD)pe.th32ProcessID);
 	unsigned char z = 4;
 	WriteProcessMemory(hSnapshot, (LPVOID)0x00443FE1, &z, 1, NULL);
@@ -17,7 +16,6 @@ void th16::des()
 
 void th16::enemysb()
 {
-	
 	hSnapshot = OpenProcess(PROCESS_ALL_ACCESS, false, (DWORD)pe.th32ProcessID);
 	unsigned char z[2] = { 0x89, 0x07 };
 	unsigned char y[2] = { 0x2B, 0xC1 };
@@ -27,9 +25,7 @@ void th16::enemysb()
 
 void th16::enemyinv()
 {
-	
 	hSnapshot = OpenProcess(PROCESS_ALL_ACCESS, false, (DWORD)pe.th32ProcessID);
-	
 	unsigned char z[2] = { 0x90, 0x90 };
 	WriteProcessMemory(hSnapshot, (LPVOID)0x0041A70D, z, 2, NULL);
 	WriteProcessMemory(hSnapshot, (LPVOID)0x0041A716, z, 2, NULL);
@@ -37,7 +33,6 @@ void th16::enemyinv()
 
 void th16::autobomb()
 {
-	
 	hSnapshot = OpenProcess(PROCESS_ALL_ACCESS, false, (DWORD)pe.th32ProcessID);
 	unsigned char z[6] = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 };
 	WriteProcessMemory(hSnapshot, (LPVOID)0x004427A8, z, 6, NULL);
@@ -45,7 +40,6 @@ void th16::autobomb()
 
 void th16::noauto()
 {
-	
 	hSnapshot = OpenProcess(PROCESS_ALL_ACCESS, false, (DWORD)pe.th32ProcessID);
 	unsigned char z[6] = { 0x0F, 0x84, 0x72, 0x02, 0x0, 0x0 };
 	WriteProcessMemory(hSnapshot, (LPVOID)0x004427A8, z, 6, NULL);
@@ -53,7 +47,6 @@ void th16::noauto()
 
 void th16::timelock()
 {
-	
 	hSnapshot = OpenProcess(PROCESS_ALL_ACCESS, false, (DWORD)pe.th32ProcessID);
 	unsigned char z[2] = { 5, 141 };
 	WriteProcessMemory(hSnapshot, (LPVOID)0x0041D4EF, z, 2, NULL);
@@ -61,7 +54,6 @@ void th16::timelock()
 
 void th16::timeres()
 {
-	
 	hSnapshot = OpenProcess(PROCESS_ALL_ACCESS, false, (DWORD)pe.th32ProcessID);
 	unsigned char z[2] = { 157, 140 };
 	WriteProcessMemory(hSnapshot, (LPVOID)0x0041D4EF, z, 2, NULL);
@@ -69,7 +61,6 @@ void th16::timeres()
 
 void th16::playerres()
 {
-	
 	hSnapshot = OpenProcess(PROCESS_ALL_ACCESS, false, (DWORD)pe.th32ProcessID);
 	unsigned char dec = 0x48;
 	WriteProcessMemory(hSnapshot, (LPVOID)0x00443D39, &dec, 1, NULL);
@@ -77,7 +68,6 @@ void th16::playerres()
 
 void th16::playerlock()
 {
-	
 	hSnapshot = OpenProcess(PROCESS_ALL_ACCESS, false, (DWORD)pe.th32ProcessID);
 	unsigned char nop = 0x90;
 	WriteProcessMemory(hSnapshot, (LPVOID)0x00443D39, &nop, 1, NULL);
@@ -85,7 +75,6 @@ void th16::playerlock()
 
 void th16::bombres()
 {
-	
 	hSnapshot = OpenProcess(PROCESS_ALL_ACCESS, false, (DWORD)pe.th32ProcessID);
 	unsigned char z[3] = { 0x83, 0xE8, 1 };
 	WriteProcessMemory(hSnapshot, (LPVOID)0x0040DB83, z, 3, NULL);
@@ -93,7 +82,6 @@ void th16::bombres()
 
 void th16::bomblock()
 {
-	
 	hSnapshot = OpenProcess(PROCESS_ALL_ACCESS, false, (DWORD)pe.th32ProcessID);
 	unsigned char z[3] = { 0x90, 0x90, 0x90 };
 	WriteProcessMemory(hSnapshot, (LPVOID)0x0040DB83, z, 3, NULL);
@@ -101,7 +89,6 @@ void th16::bomblock()
 
 void th16::powerres()
 {
-	
 	hSnapshot = OpenProcess(PROCESS_ALL_ACCESS, false, (DWORD)pe.th32ProcessID);
 	unsigned char inc = 0x47;
 	unsigned char z[6] = { 0x89, 0x0D, 0xE4, 0x57, 0, 0x4A };
@@ -111,7 +98,6 @@ void th16::powerres()
 
 void th16::powerlock()
 {
-	
 	hSnapshot = OpenProcess(PROCESS_ALL_ACCESS, false, (DWORD)pe.th32ProcessID);
 	unsigned char inc = 0x90;
 	unsigned char z[6] = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 };

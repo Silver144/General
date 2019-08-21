@@ -4,9 +4,7 @@
 PROCESSENTRY32 pe;
 HANDLE hSnapshot;
 
-#define mf std::make_pair<std::string, std::function<void()>>
-
-// #define MF std::make_pair<std::string, std::function<void()>>
+#define mf std::make_pair<QString, std::function<void()>>
 
 General::General(QWidget *parent)
 	: QMainWindow(parent), playerbox(new QCheckBox("锁残机", this)), bombbox(new QCheckBox("锁Bomb", this)), powerbox(new QCheckBox("锁火力", this)),
@@ -14,7 +12,13 @@ General::General(QWidget *parent)
 {
 	init();
 	setupUI();
-	connect(playerbox, SIGNAL(stateChanged(int)), this, SLOT(handleplayer(int)));
+	connect(playerbox.get(), SIGNAL(stateChanged(int)), this, SLOT(handleplayer(int)));
+	connect(bombbox.get(), SIGNAL(stateChanged(int)), this, SLOT(handlebomb(int)));
+	connect(powerbox.get(), SIGNAL(stateChanged(int)), this, SLOT(handlepower(int)));
+	connect(timebox.get(), SIGNAL(stateChanged(int)), this, SLOT(handletime(int)));
+	connect(invbox.get(), SIGNAL(stateChanged(int)), this, SLOT(handleinv(int)));
+	connect(autobox.get(), SIGNAL(stateChanged(int)), this, SLOT(handleauto(int)));
+	connect(eneinvbox.get(), SIGNAL(stateChanged(int)), this, SLOT(handleenemy(int)));
 }
 
 void General::handleplayer(int state)
@@ -148,10 +152,10 @@ void General::setupUI()
 	
 	int width = GetSystemMetrics(SM_CXFULLSCREEN);
 	int height = GetSystemMetrics(SM_CYFULLSCREEN);
-	this->setWindowTitle("无游戏");
-	this->setWindowFlags(Qt::WindowCloseButtonHint);
-	this->setFixedSize(200, 240);
-	this->move((width - 205) / 2, (height - 140) / 2);
+	setWindowTitle("无游戏");
+	setWindowFlags(Qt::WindowCloseButtonHint);
+	setFixedSize(200, 240);
+	move((width - 205) / 2, (height - 140) / 2);
 
 	playerbox->setGeometry(QRect(14, 14, 100, 23));
 	bombbox->setGeometry(QRect(14, 44, 100, 23));
